@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @AllArgsConstructor // constructor-based dependency injection, similar to @Autowired but more explicit
 @RequestMapping("/api/users")
@@ -27,6 +29,13 @@ public class UserController {
     public ResponseEntity<User> getUserById(@PathVariable(name = "id") Long userId) {
         User user = userService.getUserById(userId);
         return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    // build get all users REST API
+    @GetMapping
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userService.getAllUsers();
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
 }
