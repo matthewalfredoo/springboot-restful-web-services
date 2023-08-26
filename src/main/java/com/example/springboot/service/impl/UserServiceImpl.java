@@ -1,5 +1,6 @@
 package com.example.springboot.service.impl;
 
+import com.example.springboot.dto.UserDto;
 import com.example.springboot.entity.User;
 import com.example.springboot.repository.UserRepository;
 import com.example.springboot.service.UserService;
@@ -16,8 +17,20 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public User createUser(User user) {
-        return userRepository.save(user);
+    public UserDto createUser(UserDto userDto) {
+        // convert UserDto into User JPA Entity
+        User user = new User(
+                userDto.getId(), userDto.getFirstName(), userDto.getLastName(), userDto.getEmail()
+        );
+
+        User savedUser = userRepository.save(user);
+
+        // convert User JPA Entity into UserDto
+        UserDto savedUserDto = new UserDto(
+                savedUser.getId(), savedUser.getFirstName(), savedUser.getLastName(), savedUser.getEmail()
+        );
+
+        return savedUserDto;
     }
 
     @Override
