@@ -2,6 +2,7 @@ package com.example.springboot.service.impl;
 
 import com.example.springboot.dto.UserDto;
 import com.example.springboot.entity.User;
+import com.example.springboot.exception.EmailAlreadyExistsException;
 import com.example.springboot.exception.ResourceNotFoundException;
 import com.example.springboot.mapper.AutoUserMapper;
 import com.example.springboot.mapper.UserMapper;
@@ -25,6 +26,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserDto userDto) {
+        Optional<User> optionalUser = userRepository.findByEmail(userDto.getEmail());
+
+        if(optionalUser.isPresent()) {
+            throw new EmailAlreadyExistsException("Email already exists for a user");
+        }
+
         // convert UserDto into User JPA Entity
         //User user = UserMapper.mapToUser(userDto);
         // User user = modelMapper.map(userDto, User.class);
